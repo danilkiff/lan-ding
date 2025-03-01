@@ -67,21 +67,25 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
   color: #1d1c1c;
   flex-direction: column;
+  overflow-x: hidden;
 }
 
 .container {
   text-align: center;
   padding: 20px;
+  max-width: 100%;
+  width: 100%;
 }
 
 .headline {
-  font-size: 36px;
+  font-size: 28px;
   font-weight: 700;
   color: #1d1c1c;
   margin-bottom: 20px;
+  padding: 0 10px;
 }
 
 .bold {
@@ -95,17 +99,19 @@ body {
 .tabs {
   display: flex;
   justify-content: center;
-  gap: 20px;
-  margin-bottom: 20px;
+  gap: 10px;
+  margin-bottom: 10px;
   border-bottom: 2px solid #ddd;
-  padding-bottom: 10px;
+  padding-bottom: 5px;
+  overflow-x: auto;
+  white-space: nowrap;
 }
 
 .tab {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  padding: 10px;
+  padding: 8px 12px;
   border-bottom: 3px solid transparent;
 }
 
@@ -116,10 +122,10 @@ body {
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 16px;
-  padding: 20px;
-  max-width: 800px;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+  padding: 10px;
+  max-width: 100%;
   width: 100%;
 }
 
@@ -128,29 +134,29 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 15px;
   background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s ease-in-out;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease-in-out;
   cursor: pointer;
   text-align: center;
   border: 1px solid #e5e1dc;
 }
 
 .tile:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.12);
 }
 
 .tile img {
-  width: 60px;
-  height: 60px;
-  margin-bottom: 10px;
+  width: 50px;
+  height: 50px;
+  margin-bottom: 8px;
 }
 
 .tile p {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   color: #1d1c1c;
   margin: 0;
@@ -165,5 +171,32 @@ a {
   color: #9ca3af;
   box-shadow: none;
   pointer-events: none;
+}
+
+@media (max-width: 600px) {
+  .headline {
+    font-size: 22px;
+  }
+  .tabs {
+    gap: 5px;
+    padding-bottom: 2px;
+  }
+  .tab {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+  .tile {
+    padding: 10px;
+  }
+  .tile img {
+    width: 40px;
+    height: 40px;
+  }
+  .tile p {
+    font-size: 12px;
+  }
 }
 </style>

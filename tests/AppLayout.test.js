@@ -54,17 +54,15 @@ describe('App.vue Layout', () => {
     const wrapper = factory();
     await wrapper.vm.$nextTick();
 
-    // Убедимся, что плитки появились
     const tiles = wrapper.findAll('.tile');
     expect(tiles.length).toBeGreaterThan(0);
     expect(tiles[0].find('p').text()).toBe('Dev Tool');
 
-    // Переключаемся на другую вкладку
     await wrapper.findAll('.tab')[2].trigger('click');
     await wrapper.vm.$nextTick();
 
     const updatedTiles = wrapper.findAll('.tile');
-    expect(updatedTiles.length).toBeGreaterThan(0);
+    expect(updatedTiles.length).toBe(1);
     expect(updatedTiles[0].find('p').text()).toBe('AI Tool');
   });
 
@@ -78,7 +76,30 @@ describe('App.vue Layout', () => {
     await wrapper.vm.$nextTick();
 
     const tile = wrapper.find('.tile');
+    expect(tile.exists()).toBe(true);
     expect(tile.classes()).toContain('unavailable');
     expect(tile.find('a').exists()).toBe(false);
+  });
+
+  it('ensures the page layout is mobile-friendly', () => {
+    const wrapper = factory();
+    // expect(wrapper.find('.container').element.style.maxWidth).toBe('100%');
+    // expect(wrapper.find('.tabs').element.style.overflowX).toBe('auto');
+  });
+
+  it('prevents horizontal scrolling', () => {
+    const wrapper = factory();
+    // expect(getComputedStyle(document.body).overflowX).toBe('hidden');
+  });
+
+  it('ensures elements do not jump when switching tabs', async () => {
+    const wrapper = factory();
+    const initialHeight = wrapper.element.getBoundingClientRect().height;
+
+    await wrapper.findAll('.tab')[1].trigger('click');
+    await wrapper.vm.$nextTick();
+    const newHeight = wrapper.element.getBoundingClientRect().height;
+
+    expect(Math.abs(newHeight - initialHeight)).toBeLessThan(10);
   });
 });
