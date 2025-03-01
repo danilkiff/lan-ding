@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <h1 class="headline">
-      How <span class="bold">developers</span> <span class="orange">build successful products</span>
+      welcome to <span class="orange">hell /></span>
     </h1>
 
     <div class="tabs">

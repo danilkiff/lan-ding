@@ -23,7 +23,7 @@ describe('App.vue Layout', () => {
     const wrapper = factory();
     const headline = wrapper.find('.headline');
     expect(headline.exists()).toBe(true);
-    expect(headline.text()).toContain('How developers build successful products');
+    expect(headline.text()).toContain('welcome to hell />');
   });
 
   it('renders the tabs correctly', () => {
