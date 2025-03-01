@@ -1,22 +1,22 @@
-// src/stores/links.js
 import { defineStore } from 'pinia';
 
 export const useLinksStore = defineStore('links', {
   state: () => ({
     links: [
-      { url: 'https://n8n.z.pq3.ru', name: 'N8N', icon: '/icons/n8n.svg', available: true },
-      { url: 'https://pihole.z.pq3.ru/admin/login', name: 'Pi-hole', icon: '/icons/pihole.svg', available: true },
-      { url: 'https://ai.z.pq3.ru', name: 'AI Service', icon: '/icons/ai.svg', available: true },
+      { url: 'https://dev1.example.com', name: 'Dev Tool', icon: 'dev.svg', category: 'Development', available: true },
+      { url: 'https://dev2.example.com', name: 'Dev Tool', icon: 'dev.svg', category: 'Development', available: true },
+      { url: 'https://dev3.example.com', name: 'Dev Tool', icon: 'dev.svg', category: 'Development', available: true },
 
-      { url: 'https://n8n.z.pq3.ru', name: 'N8N', icon: '/icons/n8n.svg', available: true },
-      { url: 'https://pihole.z.pq3.ru/admin/login', name: 'Pi-hole', icon: '/icons/pihole.svg', available: true },
-      { url: 'https://ai.z.pq3.ru', name: 'AI Service', icon: '/icons/ai.svg', available: true },
+      { url: 'https://infra1.example.com', name: 'Infra Tool', icon: 'infra.svg', category: 'Infrastructure', available: true },
+      { url: 'https://infra2.example.com', name: 'Infra Tool', icon: 'infra.svg', category: 'Infrastructure', available: true },
+      { url: 'https://infra3.example.com', name: 'Infra Tool', icon: 'infra.svg', category: 'Infrastructure', available: true },
 
-      { url: 'https://n8n.z.pq3.ru', name: 'N8N', icon: '/icons/n8n.svg', available: true },
-      { url: 'https://pihole.z.pq3.ru/admin/login', name: 'Pi-hole', icon: '/icons/pihole.svg', available: true },
-      { url: 'https://ai.z.pq3.ru', name: 'AI Service', icon: '/icons/ai.svg', available: true }
+      { url: 'https://ai1.example.com', name: 'AI Tool', icon: 'ai.svg', category: 'AI & DS', available: true },
+      { url: 'https://ai2.example.com', name: 'AI Tool', icon: 'ai.svg', category: 'AI & DS', available: true },
+      { url: 'https://ai3.example.com', name: 'AI Tool', icon: 'ai.svg', category: 'AI & DS', available: true },
     ]
   }),
+
   actions: {
     async checkLinks() {
       for (const link of this.links) {

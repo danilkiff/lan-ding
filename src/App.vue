@@ -1,11 +1,26 @@
 <template>
   <div class="container">
     <h1 class="headline">
-      Welcome to <span class="orange">z.pq3.ru</span>
+      How <span class="bold">developers</span> <span class="orange">build successful products</span>
     </h1>
-  
+
+    <div class="tabs">
+      <span 
+        v-for="category in categories" 
+        :key="category" 
+        :class="['tab', { active: activeCategory === category }]" 
+        @click="activeCategory = category"
+      >
+        {{ category }}
+      </span>
+    </div>
+
     <div class="grid">
-      <div v-for="link in store.links" :key="link.url" class="tile" :class="{ unavailable: !link.available }">
+      <div 
+        v-for="link in filteredLinks" 
+        :key="link.url" 
+        class="tile" 
+        :class="{ unavailable: !link.available }">
         <a v-if="link.available" :href="link.url" target="_blank">
           <img :src="link.icon" :alt="link.name" />
           <p>{{ link.name }}</p>
@@ -20,28 +35,32 @@
 </template>
 
 <script>
-import { onMounted } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 import { useLinksStore } from './stores/links';
 
 export default {
   setup() {
     const store = useLinksStore();
+    const categories = ref(["Development", "Infrastructure", "AI & DS"]);
+    const activeCategory = ref("Development");
+
+    const filteredLinks = computed(() => 
+      store.links.filter(link => link.category === activeCategory.value)
+    );
+
     onMounted(() => {
       store.checkLinks();
       setInterval(() => store.checkLinks(), 5000);
     });
-    return { store };
+
+    return { store, categories, activeCategory, filteredLinks };
   }
 };
 </script>
 
 <style>
-a {
-  text-decoration: none;
-}
-
 body {
-  font-family: arial,"sans-serif";
+  font-family: 'Inter', sans-serif;
   background-color: #f5f3ef;
   margin: 0;
   padding: 0;
@@ -55,18 +74,44 @@ body {
 
 .container {
   text-align: center;
+  padding: 20px;
 }
 
 .headline {
-  font-size: 48px;
-  font-weight: 600;
-  text-align: center;
+  font-size: 36px;
+  font-weight: 700;
   color: #1d1c1c;
-  margin-bottom: 5px;
+  margin-bottom: 20px;
+}
+
+.bold {
+  color: black;
 }
 
 .orange {
   color: #e66300;
+}
+
+.tabs {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 10px;
+}
+
+.tab {
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 10px;
+  border-bottom: 3px solid transparent;
+}
+
+.tab.active {
+  color: #e66300;
+  border-bottom: 3px solid #e66300;
 }
 
 .grid {
@@ -109,6 +154,10 @@ body {
   font-weight: 600;
   color: #1d1c1c;
   margin: 0;
+}
+
+a {
+  text-decoration: none;
 }
 
 .tile.unavailable {

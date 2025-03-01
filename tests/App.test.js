@@ -13,7 +13,7 @@ describe('App.vue', () => {
     const wrapper = mount(App);
     const store = useLinksStore();
     store.links = [
-      { url: 'https://example.com', name: 'Example', icon: 'example.svg', available: true }
+      { url: 'https://example.com', name: 'Example', icon: 'example.svg', category: 'Development', available: true }
     ];
     await wrapper.vm.$nextTick();
     expect(wrapper.find('a').attributes('href')).toBe('https://example.com');
