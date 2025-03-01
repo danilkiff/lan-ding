@@ -5,6 +5,7 @@ export const useLinksStore = defineStore('links', {
     links: [
       // dev
       { url: 'https://sq.none.pq3.ru', name: 'SonarQube', icon: '/icons/pihole.svg', category: 'Development', available: true },
+      { url: 'https://gitea.z.pq3.ru', name: 'Gitea', icon: '/icons/gitea.svg', category: 'Development', available: true },
 
       // infra
       { url: 'https://grafana.z.pq3.ru/', name: 'Grafana', icon: '/icons/grafana.svg', category: 'Infrastructure', available: true },

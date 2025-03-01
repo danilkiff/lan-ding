@@ -48,9 +48,11 @@ export default {
       store.links.filter(link => link.category === activeCategory.value)
     );
 
+    const intervalId = ref(null);
+
     onMounted(() => {
       store.checkLinks();
-      setInterval(() => store.checkLinks(), 5000);
+      intervalId.value = setInterval(() => store.checkLinks(), 5000);
     });
 
     return { store, categories, activeCategory, filteredLinks };
@@ -113,6 +115,7 @@ body {
   cursor: pointer;
   padding: 8px 12px;
   border-bottom: 3px solid transparent;
+  transition: all 0.3s ease;
 }
 
 .tab.active {
