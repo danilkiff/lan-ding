@@ -24,6 +24,10 @@ describe('App.vue', () => {
     });
   });
 
+  afterEach(() => {
+    wrapper.unmount();
+  });
+
   it('renders links correctly', async () => {
     const wrapper = mount(App);
     const store = useLinksStore();

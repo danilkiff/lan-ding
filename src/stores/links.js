@@ -17,6 +17,13 @@ export const useLinksStore = defineStore('links', {
     ]
   }),
 
+  getters: {
+    categories: (state) => {
+      const cats = new Set(state.links.map(link => link.category));
+      return [...cats];
+    }
+  },
+
   actions: {
     async checkLinks() {
       for (const link of this.links) {

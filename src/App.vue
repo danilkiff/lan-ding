@@ -41,8 +41,8 @@ import { useLinksStore } from './stores/links';
 export default {
   setup() {
     const store = useLinksStore();
-    const categories = ref(["Development", "Infrastructure", "AI & DS"]);
-    const activeCategory = ref("Development");
+    const categories = computed(() => store.categories);
+    const activeCategory = ref('');
 
     const filteredLinks = computed(() => 
       store.links.filter(link => link.category === activeCategory.value)
@@ -55,6 +55,9 @@ export default {
       const savedCategory = localStorage.getItem('activeCategory');
       if (savedCategory && categories.value.includes(savedCategory)) {
         activeCategory.value = savedCategory;
+      } else {
+        // категория невалидна. Берём первую категорию, если есть 
+        activeCategory.value = categories.value[0] || '';
       }
 
       store.checkLinks();
