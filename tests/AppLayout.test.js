@@ -7,6 +7,7 @@ import { useLinksStore } from '../src/stores/links';
 
 describe('App.vue Layout', () => {
   beforeEach(() => {
+    localStorage.clear();
     setActivePinia(createPinia());
   });
 

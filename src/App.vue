@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { computed, ref, onMounted } from 'vue';
+import { computed, ref, onMounted, onUnmounted, watch } from 'vue';
 import { useLinksStore } from './stores/links';
 
 export default {
@@ -51,8 +51,23 @@ export default {
     const intervalId = ref(null);
 
     onMounted(() => {
+      // При первом посещении берём сохраненную вкладку из localStorage (если есть)
+      const savedCategory = localStorage.getItem('activeCategory');
+      if (savedCategory && categories.value.includes(savedCategory)) {
+        activeCategory.value = savedCategory;
+      }
+
       store.checkLinks();
       intervalId.value = setInterval(() => store.checkLinks(), 5000);
+    });
+
+    onUnmounted(() => {
+      clearInterval(intervalId.value);
+    });
+
+    // Следим за изменениями activeCategory, при любом изменении пишем в localStorage
+    watch(activeCategory, (newVal) => {
+      localStorage.setItem('activeCategory', newVal);
     });
 
     return { store, categories, activeCategory, filteredLinks };
