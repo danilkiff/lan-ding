@@ -11,6 +11,9 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v3
+        # disable shallow clone: SQ needs blame info
+        with:
+          fetch-depth: 0
 
       - name: Use Node 22
         uses: actions/setup-node@v3
@@ -22,6 +25,18 @@ jobs:
 
       - name: Generate coverage report
         run: npm run coverage
+
+      - name: SQ Scan
+        uses: SonarSource/sonarqube-scan-action@v4
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+      - name: SQ Check Quality Gate status
+        uses: SonarSource/sonarqube-quality-gate-action@v1
+        timeout-minutes: 5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: Build Vite app
         run: npm run build
