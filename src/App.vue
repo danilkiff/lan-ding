@@ -84,20 +84,15 @@ body {
   background-color: #f5f3ef;
   margin: 0;
   padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   min-height: 100vh;
   color: #1d1c1c;
-  flex-direction: column;
   overflow-x: hidden;
 }
 
 .container {
-  text-align: center;
-  padding: 20px;
-  max-width: 100%;
-  width: 100%;
+  position: sticky;
+  background-color: #f5f3ef;
+  padding: 100px;
 }
 
 .headline {
@@ -105,7 +100,6 @@ body {
   font-weight: 700;
   color: #1d1c1c;
   margin-bottom: 20px;
-  padding: 0 10px;
 }
 
 .bold {
@@ -148,7 +142,6 @@ body {
   padding: 10px;
   max-width: 100%;
   width: 100%;
-  min-height: 400px;
 }
 
 .tile {
