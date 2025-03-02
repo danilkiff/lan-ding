@@ -148,6 +148,7 @@ body {
   padding: 10px;
   max-width: 100%;
   width: 100%;
+  min-height: 400px;
 }
 
 .tile {
