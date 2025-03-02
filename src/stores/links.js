@@ -27,17 +27,32 @@ export const useLinksStore = defineStore('links', {
 
   actions: {
     async checkLinks() {
-      for (const link of this.links) {
+      const updates = await Promise.all(this.links.map(async link => {
         try {
           const controller = new AbortController();
           const timeout = setTimeout(() => controller.abort(), 500);
-          const response = await fetch(link.url, { method: 'HEAD', signal: controller.signal });
+          const response = await fetch(link.url, { 
+            method: 'HEAD', 
+            signal: controller.signal 
+          });
+
           clearTimeout(timeout);
-          link.available = response.status === 200;
-        } catch {
-          link.available = false;
+          
+          return { url: link.url, available: response.ok };
+        } catch (error) {
+          return { url: link.url, available: false };
         }
-      }
+      }));
+
+      this.$patch(state => {
+        // Обновляем ВСЕ совпадения по URL
+        state.links.forEach(link => {
+          const update = updates.find(u => u.url === link.url);
+          if (update) {
+            link.available = update.available;
+          }
+        });
+      });
     }
   }
 });
