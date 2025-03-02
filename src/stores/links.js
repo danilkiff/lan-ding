@@ -20,37 +20,35 @@ export const useLinksStore = defineStore('links', {
 
   getters: {
     categories: (state) => {
-      const cats = new Set(state.links.map(link => link.category));
-      return [...cats];
+      return [...new Set(state.links.map(link => link.category))];
     }
   },
 
   actions: {
     async checkLinks() {
-      const updates = await Promise.all(this.links.map(async link => {
+      const updates = await this.fetchLinkStatuses();
+      this.updateLinkAvailability(updates);
+    },
+
+    async fetchLinkStatuses() {
+      return Promise.all(this.links.map(async (link) => {
         try {
           const controller = new AbortController();
           const timeout = setTimeout(() => controller.abort(), 500);
-          const response = await fetch(link.url, { 
-            method: 'HEAD', 
-            signal: controller.signal 
-          });
-
+          const response = await fetch(link.url, { method: 'HEAD', signal: controller.signal });
           clearTimeout(timeout);
-          
           return { url: link.url, available: response.ok };
-        } catch (error) {
+        } catch {
           return { url: link.url, available: false };
         }
       }));
+    },
 
-      this.$patch(state => {
-        // Обновляем ВСЕ совпадения по URL
-        state.links.forEach(link => {
-          const update = updates.find(u => u.url === link.url);
-          if (update) {
-            link.available = update.available;
-          }
+    updateLinkAvailability(updates) {
+      this.$patch((state) => {
+        state.links.forEach((link) => {
+          const update = updates.find((u) => u.url === link.url);
+          if (update) link.available = update.available;
         });
       });
     }
