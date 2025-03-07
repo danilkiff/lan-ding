@@ -20,35 +20,57 @@ export const useLinksStore = defineStore('links', {
 
   getters: {
     categories: (state) => {
-      return [...new Set(state.links.map(link => link.category))];
+      return [...new Set(
+        state.links.map(link => link.category)
+      )];
     }
   },
 
   actions: {
     async checkLinks() {
       const updates = await this.fetchLinkStatuses();
-      this.updateLinkAvailability(updates);
+      await this.updateLinkAvailability(updates);
+    },
+
+    async fetchLinkStatus(link) {
+      try {
+        const controller = new AbortController();
+        const timeout = setTimeout(
+          () => controller.abort(), 500
+        );
+        const response = await fetch(link.url, {
+          method: 'HEAD',
+          signal: controller.signal
+        });
+        clearTimeout(timeout);
+        return {
+          url: link.url,
+          available: response.ok
+        };
+      } catch {
+        return {
+          url: link.url,
+          available: false
+        };
+      }
     },
 
     async fetchLinkStatuses() {
-      return Promise.all(this.links.map(async (link) => {
-        try {
-          const controller = new AbortController();
-          const timeout = setTimeout(() => controller.abort(), 500);
-          const response = await fetch(link.url, { method: 'HEAD', signal: controller.signal });
-          clearTimeout(timeout);
-          return { url: link.url, available: response.ok };
-        } catch {
-          return { url: link.url, available: false };
-        }
-      }));
+      return Promise.all(
+        this.links.map(
+          async (link) => await this.fetchLinkStatus(link)
+        ));
     },
 
-    updateLinkAvailability(updates) {
+    async updateLinkAvailability(updates) {
       this.$patch((state) => {
         state.links.forEach((link) => {
-          const update = updates.find((u) => u.url === link.url);
-          if (update) link.available = update.available;
+          const update = updates.find(
+            (u) => u.url === link.url
+          );
+          if (update) {
+            link.available = update.available;
+          }
         });
       });
     }
