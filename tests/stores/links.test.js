@@ -12,17 +12,17 @@ describe('Links Store', () => {
 
   describe('checkLinks', () => {
     it('handles request timeout correctly', async () => {
-      global.fetch = vi.fn(() => new Promise(resolve => 
+      global.fetch = vi.fn(() => new Promise(resolve =>
         setTimeout(() => resolve({ status: 200 }), 1000)
       ));
-      
+
       await store.checkLinks();
       expect(store.links.every(l => !l.available)).toBe(true);
     });
 
     it('handles network errors', async () => {
       global.fetch = vi.fn(() => Promise.reject(new Error('Network Error')));
-      
+
       await store.checkLinks();
       expect(store.links.some(l => l.available)).toBe(false);
     });
@@ -30,7 +30,7 @@ describe('Links Store', () => {
     it('preserves existing properties when updating availability', async () => {
       const originalLinks = [...store.links];
       await store.checkLinks();
-      
+
       expect(store.links).toEqual(expect.arrayContaining(
         originalLinks.map(link => expect.objectContaining({
           url: link.url,
@@ -43,14 +43,14 @@ describe('Links Store', () => {
 
     it.each([
       [200, true],
-      [204, true], 
+      [204, true],
       [301, false], // Редиректы не считаются успешными для HEAD
       [404, false],
       [503, false]
     ])('handles %i status correctly', async (status, expected) => {
       global.fetch = vi.fn(() => Promise.resolve({ status, ok: status >= 200 && status < 300 }));
       store.links = [{ url: 'test', category: 'Test', available: !expected }];
-      
+
       await store.checkLinks();
       expect(store.links[0].available).toBe(expected);
     });
@@ -58,11 +58,11 @@ describe('Links Store', () => {
     it('processes links in parallel', async () => {
       const start = Date.now();
       store.links = Array(10).fill().map(() => ({ url: 'https://test.com', category: 'Test' }));
-      
-      global.fetch = vi.fn(() => 
+
+      global.fetch = vi.fn(() =>
         new Promise(resolve => setTimeout(() => resolve({ status: 200 }), 100))
       );
-      
+
       await store.checkLinks();
       const duration = Date.now() - start;
       expect(duration).toBeLessThan(200); // Проверка параллельной обработки
@@ -91,15 +91,15 @@ describe('Links Store', () => {
       const SUCCESS_URL = 'https://success.com';
       const FAIL_URL = 'https://fail.com';
       const CATEGORY = 'Dev';
-      
+
       store.links = [
         { url: SUCCESS_URL, category: CATEGORY, available: false },
         { url: FAIL_URL, category: CATEGORY, available: false }
       ];
 
       global.fetch = vi.fn((url) => {
-        const mockResponse = url === SUCCESS_URL 
-          ? { status: 200, ok: true } 
+        const mockResponse = url === SUCCESS_URL
+          ? { status: 200, ok: true }
           : { status: 500, ok: false };
         return Promise.resolve(mockResponse);
       });
@@ -107,7 +107,7 @@ describe('Links Store', () => {
       await store.checkLinks();
 
       const [successLink, failLink] = store.links;
-      
+
       expect(global.fetch).toHaveBeenCalledTimes(store.links.length);
       expect(successLink.available).toBe(true);
       expect(failLink.available).toBe(false);

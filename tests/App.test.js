@@ -14,7 +14,7 @@ describe('App.vue', () => {
     const pinia = createTestingPinia({
       stubActions: false
     });
-    
+
     store = useLinksStore();
     checkLinksSpy = vi.spyOn(store, 'checkLinks');
     wrapper = mount(App, {
