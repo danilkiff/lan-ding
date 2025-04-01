@@ -40,7 +40,7 @@ export const useLinksStore = defineStore('links', {
           () => controller.abort(), 500
         );
         const response = await fetch(link.url, {
-          method: 'HEAD',
+          method: 'GET',
           signal: controller.signal
         });
         clearTimeout(timeout);
