@@ -54,13 +54,17 @@ body {
     border-bottom: 3px solid #e66300;
 }
 
+.grid-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(150px, max-content));
     gap: 10px;
     padding: 10px;
     max-width: 100%;
-    width: 100%;
 }
 
 .tile {
