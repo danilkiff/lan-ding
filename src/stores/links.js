@@ -6,6 +6,7 @@ export const useLinksStore = defineStore('links', {
       // dev
       { url: 'https://sonar.z.pq3.ru', name: 'SonarQube', icon: '/icons/sonar.svg', category: 'Development', available: true },
       { url: 'https://gitea.z.pq3.ru', name: 'Gitea', icon: '/icons/gitea.svg', category: 'Development', available: true },
+      { url: 'https://nexus.z.pq3.ru/', name: 'Nexus', icon: '/icons/nexus.svg', category: 'Development', available: true },
       { url: 'https://cloud.z.pq3.ru/login', name: 'NextCloud', icon: '/icons/cloud.svg', category: 'Development', available: true },
 
       // infra
