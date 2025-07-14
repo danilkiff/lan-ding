@@ -1,7 +1,7 @@
 import { createTestingPinia } from '@pinia/testing';
 import { mount } from '@vue/test-utils';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import App from '../src/App.vue';
+import App from '../../src/App.vue';
 
 describe('App.vue theme (dark/light) logic', () => {
   let originalMatchMedia;
@@ -20,36 +20,36 @@ describe('App.vue theme (dark/light) logic', () => {
     document.body.classList.remove('dark');
   });
 
-  it('switches theme on button click', async () => {
+  it('toggles theme when button is clicked', async () => {
     const wrapper = mount(App, { global: { plugins: [createTestingPinia({ stubActions: false })] } });
-    // По умолчанию светлая тема
+    // Light theme by default
     expect(wrapper.vm.isDark).toBe(false);
     expect(document.body.classList.contains('dark')).toBe(false);
-    // Клик по кнопке
+    // Click the button
     await wrapper.find('.theme-toggle').trigger('click');
     expect(wrapper.vm.isDark).toBe(true);
     expect(document.body.classList.contains('dark')).toBe(true);
-    // Клик обратно
+    // Click again to switch back
     await wrapper.find('.theme-toggle').trigger('click');
     expect(wrapper.vm.isDark).toBe(false);
     expect(document.body.classList.contains('dark')).toBe(false);
   });
 
-  it('initializes dark theme from localStorage', () => {
+  it('initializes dark theme if localStorage is dark', () => {
     localStorage.setItem('theme', 'dark');
     const wrapper = mount(App, { global: { plugins: [createTestingPinia({ stubActions: false })] } });
     expect(wrapper.vm.isDark).toBe(true);
     expect(document.body.classList.contains('dark')).toBe(true);
   });
 
-  it('initializes light theme from localStorage', () => {
+  it('initializes light theme if localStorage is light', () => {
     localStorage.setItem('theme', 'light');
     const wrapper = mount(App, { global: { plugins: [createTestingPinia({ stubActions: false })] } });
     expect(wrapper.vm.isDark).toBe(false);
     expect(document.body.classList.contains('dark')).toBe(false);
   });
 
-  it('initializes dark theme from system if no localStorage', () => {
+  it('initializes dark theme from system preference if no localStorage', () => {
     localStorage.removeItem('theme');
     window.matchMedia = vi.fn().mockImplementation(query => ({ matches: query.includes('dark') }));
     const wrapper = mount(App, { global: { plugins: [createTestingPinia({ stubActions: false })] } });
@@ -65,12 +65,12 @@ describe('App.vue theme (dark/light) logic', () => {
     expect(localStorage.getItem('theme')).toBe('light');
   });
 
-  it('sets correct aria-label and icon', async () => {
+  it('sets correct aria-label and icon for theme button', async () => {
     const wrapper = mount(App, { global: { plugins: [createTestingPinia({ stubActions: false })] } });
-    // Светлая тема по умолчанию
+    // Light theme by default
     expect(wrapper.find('.theme-toggle').attributes('aria-label')).toMatch(/Тёмная тема/);
     expect(wrapper.find('.theme-icon').text()).toBe('🌙');
-    // Переключаем на тёмную
+    // Switch to dark theme
     await wrapper.find('.theme-toggle').trigger('click');
     expect(wrapper.find('.theme-toggle').attributes('aria-label')).toMatch(/Светлая тема/);
     expect(wrapper.find('.theme-icon').text()).toBe('🌞');

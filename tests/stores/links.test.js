@@ -1,6 +1,6 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { setActivePinia, createPinia } from 'pinia';
-import { useLinksStore } from '@/stores/links';
+import { createPinia, setActivePinia } from 'pinia';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { useLinksStore } from '../../src/stores/links';
 
 describe('Links Store', () => {
   let store;
@@ -20,14 +20,14 @@ describe('Links Store', () => {
       expect(store.links.every(l => !l.available)).toBe(true);
     });
 
-    it('handles network errors', async () => {
+  it('handles network errors', async () => {
       global.fetch = vi.fn(() => Promise.reject(new Error('Network Error')));
 
       await store.checkLinks();
       expect(store.links.some(l => l.available)).toBe(false);
     });
 
-    it('preserves existing properties when updating availability', async () => {
+  it('preserves existing properties when updating availability', async () => {
       const originalLinks = [...store.links];
       await store.checkLinks();
 
@@ -44,7 +44,7 @@ describe('Links Store', () => {
     it.each([
       [200, true],
       [204, true],
-      [301, false], // Редиректы не считаются успешными для HEAD
+      [301, false], // Redirects are not considered successful for HEAD
       [404, false],
       [503, false]
     ])('handles %i status correctly', async (status, expected) => {
@@ -55,7 +55,7 @@ describe('Links Store', () => {
       expect(store.links[0].available).toBe(expected);
     });
 
-    it('processes links in parallel', async () => {
+  it('processes links in parallel', async () => {
       const start = Date.now();
       store.links = Array(10).fill().map(() => ({ url: 'https://test.com', category: 'Test' }));
 
@@ -65,7 +65,7 @@ describe('Links Store', () => {
 
       await store.checkLinks();
       const duration = Date.now() - start;
-      expect(duration).toBeLessThan(200); // Проверка параллельной обработки
+      expect(duration).toBeLessThan(200); // Check for parallel processing
     });
   });
 
@@ -75,7 +75,7 @@ describe('Links Store', () => {
 
       store.links = [
         { url: 'dummy-1', category: CATEGORIES.DEV },
-        { url: 'dummy-2', category: CATEGORIES.DEV }, // Дубликат категории
+        { url: 'dummy-2', category: CATEGORIES.DEV }, // Duplicate category
         { url: 'dummy-3', category: CATEGORIES.OPS }
       ];
 

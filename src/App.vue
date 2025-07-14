@@ -1,47 +1,21 @@
 <template>
   <div class="container">
-    <div style="display: flex; align-items: center; justify-content: space-between;">
-      <h1 class="headline" style="margin: 0;">
-        welcome to <span class="orange">hell /></span>
-      </h1>
-      <button
-        class="theme-toggle"
-        :aria-label="isDark ? 'Светлая тема' : 'Тёмная тема'"
-        @click="toggleTheme"
-      >
-        <span v-if="isDark" class="theme-icon">🌞</span>
-        <span v-else class="theme-icon">🌙</span>
-      </button>
-    </div>
-
-    <div class="tabs">
-      <span v-for="category in categories" :key="category" :class="['tab', { active: activeCategory === category }]"
-        @click="activeCategory = category">
-        {{ category }}
-      </span>
-    </div>
-    
-    <div class="grid-wrapper"><div class="grid">
-      <div v-for="link in filteredLinks" :key="link.url" class="tile" :class="{ unavailable: !link.available }">
-        <a v-if="link.available" :href="link.url" target="_blank">
-          <img :src="link.icon" :alt="link.name" />
-          <p>{{ link.name }}</p>
-        </a>
-        <div v-else>
-          <img :src="link.icon" :alt="link.name" />
-          <p>{{ link.name }}</p>
-        </div>
-      </div>
-    </div></div>
+    <Header :isDark="isDark" @toggle-theme="toggleTheme" />
+    <Tabs :categories="categories" :activeCategory="activeCategory" @update:activeCategory="val => activeCategory = val" />
+    <LinksGrid :links="filteredLinks" />
   </div>
 </template>
 
 <script>
 import '@/assets/styles/dark.css';
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
+import Header from './components/Header.vue';
+import LinksGrid from './components/LinksGrid.vue';
+import Tabs from './components/Tabs.vue';
 import { useLinksStore } from './stores/links';
 
 export default {
+  components: { Header, Tabs, LinksGrid },
   setup() {
     const store = useLinksStore();
     const categories = computed(() => store.categories);
@@ -63,16 +37,13 @@ export default {
     const toggleTheme = () => setTheme(!isDark.value);
 
     onMounted(() => {
-      // При первом посещении берём сохраненную вкладку из localStorage (если есть)
       const savedCategory = localStorage.getItem('activeCategory');
       if (savedCategory && categories.value.includes(savedCategory)) {
         activeCategory.value = savedCategory;
       } else {
-        // категория невалидна. Берём первую категорию, если есть 
         activeCategory.value = categories.value[0] || '';
       }
 
-      // Применяем тему из localStorage или по умолчанию (по системной теме)
       const savedTheme = localStorage.getItem('theme');
       if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
         setTheme(true);
@@ -91,12 +62,11 @@ export default {
       clearInterval(intervalId.value);
     });
 
-    // Следим за изменениями activeCategory, при любом изменении пишем в localStorage
     watch(activeCategory, (newVal) => {
       localStorage.setItem('activeCategory', newVal);
     });
 
-    return { store, categories, activeCategory, filteredLinks, isDark, toggleTheme };
+    return { categories, activeCategory, filteredLinks, isDark, toggleTheme };
   }
 };
 </script>

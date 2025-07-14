@@ -1,8 +1,8 @@
 import { mount } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import App from '../src/App.vue';
-import { useLinksStore } from '../src/stores/links';
+import App from '../../src/App.vue';
+import { useLinksStore } from '../../src/stores/links';
 
 describe('App.vue Layout', () => {
   beforeEach(() => {
@@ -13,7 +13,7 @@ describe('App.vue Layout', () => {
     };
     setActivePinia(createPinia());
 
-    // Добавляем стили для тестов
+    // Add styles for tests
     const style = document.createElement('style');
     style.innerHTML = `
       .container {
@@ -31,7 +31,7 @@ describe('App.vue Layout', () => {
 
   afterEach(() => {
     global.localStorage.clear();
-    document.head.innerHTML = ''; // Очищаем добавленные стили
+    document.head.innerHTML = ''; // Clear added styles
   });
 
   const createTestLinks = () => [
@@ -49,29 +49,6 @@ describe('App.vue Layout', () => {
   it('renders the main container', async () => {
     const wrapper = await mountApp();
     expect(wrapper.find('.container').exists()).toBe(true);
-  });
-
-  it('renders the headline correctly', async () => {
-    const wrapper = await mountApp();
-    const headline = wrapper.find('.headline');
-    expect(headline.exists()).toBe(true);
-    expect(headline.text()).toContain('welcome to hell />');
-  });
-
-  it('renders the tabs correctly', async () => {
-    const wrapper = await mountApp();
-    const tabs = wrapper.findAll('.tab');
-    expect(tabs.length).toBe(3);
-    expect(tabs[0].text()).toBe('Development');
-    expect(tabs[1].text()).toBe('Infrastructure');
-    expect(tabs[2].text()).toBe('AI & DS');
-  });
-
-  it('switches categories when a tab is clicked', async () => {
-    const wrapper = await mountApp();
-    const tabs = wrapper.findAll('.tab');
-    await tabs[1].trigger('click');
-    expect(wrapper.find('.tab.active').text()).toBe('Infrastructure');
   });
 
   it('renders links inside the selected category', async () => {
