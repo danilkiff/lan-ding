@@ -1,7 +1,7 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { mount } from '@vue/test-utils';
-import App from '../src/App.vue';
 import { createPinia, setActivePinia } from 'pinia';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import App from '../src/App.vue';
 import { useLinksStore } from '../src/stores/links';
 
 describe('App.vue Layout', () => {
@@ -89,17 +89,29 @@ describe('App.vue Layout', () => {
     expect(tiles[0].find('p').text()).toBe('AI Tool');
   });
 
-  it('does not render unavailable links as clickable', async () => {
+  it('renders unavailable tile correctly in light theme (not clickable, has class)', async () => {
     const store = useLinksStore();
     store.links = [
       { url: 'https://broken.example.com', name: 'Broken Link', icon: 'broken.svg', category: 'Development', available: false }
     ];
-
     const wrapper = await mountApp();
     const tile = wrapper.find('.tile');
     expect(tile.exists()).toBe(true);
     expect(tile.classes()).toContain('unavailable');
     expect(tile.find('a').exists()).toBe(false);
+  });
+
+  it('renders unavailable tile with correct class in dark theme', async () => {
+    const store = useLinksStore();
+    store.links = [
+      { url: 'https://broken.example.com', name: 'Broken Link', icon: 'broken.svg', category: 'Development', available: false }
+    ];
+    document.body.classList.add('dark');
+    const wrapper = await mountApp();
+    const tile = wrapper.find('.tile.unavailable');
+    expect(tile.exists()).toBe(true);
+    expect(tile.classes()).toContain('unavailable');
+    document.body.classList.remove('dark');
   });
 
   it('ensures the page layout is mobile-friendly', async () => {

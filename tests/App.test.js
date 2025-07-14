@@ -1,8 +1,8 @@
 // tests/App.test.js
-import { mount } from '@vue/test-utils';
 import { createTestingPinia } from '@pinia/testing';
-import { useLinksStore } from '../src/stores/links';
+import { mount } from '@vue/test-utils';
 import App from '../src/App.vue';
+import { useLinksStore } from '../src/stores/links';
 
 describe('App.vue', () => {
   let store;
@@ -25,7 +25,9 @@ describe('App.vue', () => {
   });
 
   afterEach(() => {
-    wrapper.unmount();
+    if (wrapper && typeof wrapper.unmount === 'function') {
+      wrapper.unmount();
+    }
   });
 
   it('renders links correctly', async () => {

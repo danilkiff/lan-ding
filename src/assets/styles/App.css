@@ -109,6 +109,7 @@ a {
     color: #9ca3af;
     box-shadow: none;
     pointer-events: none;
+    border: 1px solid #e85151;
 }
 
 @media (max-width: 600px) {

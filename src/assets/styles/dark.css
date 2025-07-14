@@ -1,0 +1,78 @@
+body.dark {
+    background-color: #19181b;
+    color: #f5f3ef;
+}
+
+body.dark img[src$=".svg"] {
+    filter: invert(1) hue-rotate(180deg);
+}
+body.dark .container {
+    background-color: #19181b;
+}
+
+body.dark .headline {
+    color: #f5f3ef;
+}
+
+body.dark .bold {
+    color: #fff;
+}
+
+body.dark .orange {
+    color: #ff8a3c;
+}
+
+body.dark .tabs {
+    border-bottom: 2px solid #2d2a32;
+}
+
+body.dark .tab {
+    color: #cfcfd1;
+}
+
+body.dark .tab.active {
+    color: #ff8a3c;
+    border-bottom: 3px solid #ff8a3c;
+}
+
+body.dark .tile {
+    background: #232129;
+    border: 1px solid #2d2a32;
+    color: #f5f3ef;
+}
+
+body.dark .tile p {
+    color: #f5f3ef;
+}
+
+body.dark .tile.unavailable {
+    background: #2d2a32;
+    color: #6c6c6c;
+    border: 1px solid #e85151;
+}
+
+body.dark a {
+    color: #ff8a3c;
+}
+
+@media (max-width: 600px) {
+    body.dark .headline {
+        font-size: 22px;
+    }
+    body.dark .tab {
+        font-size: 12px;
+    }
+    body.dark .grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+    body.dark .tile {
+        padding: 10px;
+    }
+    body.dark .tile img {
+        width: 40px;
+        height: 40px;
+    }
+    body.dark .tile p {
+        font-size: 12px;
+    }
+}

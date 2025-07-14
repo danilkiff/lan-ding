@@ -1,11 +1,14 @@
 import { fileURLToPath } from 'node:url'
-import { mergeConfig, defineConfig, configDefaults } from 'vitest/config'
+import { configDefaults, defineConfig, mergeConfig } from 'vitest/config'
 import viteConfig from './vite.config'
 
 export default mergeConfig(
   viteConfig,
   defineConfig({
     test: {
+      setupFiles: [
+        'tests/setup/matchMediaMock.js',
+      ],
       environment: 'jsdom',
       globals: true,
       exclude: [...configDefaults.exclude, 'e2e/**'],
