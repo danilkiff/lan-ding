@@ -1,7 +1,12 @@
 # Lan-ding: hub page for local infrastructure
 
-**Stack:** Vue 3 + Pinia, Vite.
+**Stack:** 
+Vue 3 + Pinia, Vite.
+
 **Purpose:** a single start page with quick links to services in your internal network. Supports categories, availability indicator, and light/dark theme.
+
+![Light theme](./img/landing_light.png)
+![Dark theme](./img/landing_dark.png)
 
 ## Features
 
